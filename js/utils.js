@@ -9,8 +9,9 @@ const getPositiveInteger = (min, max) => {
 
 export {getPositiveInteger};
 
-// Вычисление длины комментария
+/* Вычисление длины комментария
 
 const checkStringLength = (string, stringLengthMax) => {
   return string.length <= stringLengthMax;
 };
+*/
