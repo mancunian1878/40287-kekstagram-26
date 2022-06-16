@@ -37,10 +37,10 @@ const generatePosts = (count) => {
   for (let post = 1; post <= count; post++) {
     posts.push(createPost(post));
   }
-  return objects;
+  return posts;
 };
 
-generateObjects(25);
+generatePosts(25);
 
 export {createComment, createPost, generatePosts,
   MESSAGES,
