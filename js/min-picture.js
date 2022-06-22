@@ -18,7 +18,7 @@ const createPicture = (url, likes, comments) => {
 // POSTS массив с генерированными объектами
 
 POSTS.forEach(({url, likes, comments}) => {
-  createPicture({url, likes, comments});
+  createPicture(url, likes, comments);
 
 });
 /*
