@@ -12,21 +12,21 @@ const createPicture = (url, likes, comments) => {
   PICTURE.querySelector('.picture__comments').textContent = comments;
   FRAGMENT.appendChild(PICTURE);
   pictures.appendChild(FRAGMENT);
-  
+
 };
 
 // POSTS массив с генерированными объектами
 
 POSTS.forEach(({url, likes, comments}) => {
   createPicture({url, likes, comments});
-  
-})
+
+});
 /*
 Отобразить фотографии других пользователей.
 
 Заведите модуль, который будет отвечать за отрисовку миниатюр.
 
-На основе временных данных для разработки и шаблона #picture создайте DOM-элементы, 
+На основе временных данных для разработки и шаблона #picture создайте DOM-элементы,
 соответствующие фотографиям, и заполните их данными:
 
 Адрес изображения url подставьте как атрибут src изображения.
