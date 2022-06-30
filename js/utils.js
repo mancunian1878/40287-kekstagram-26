@@ -7,11 +7,12 @@ const getPositiveInteger = (min, max) => {
 
 };
 
-export {getPositiveInteger};
+const isEscapeKey  = (esc) => esc.key === 'Escape';
 
-/* Вычисление длины комментария
+// Вычисление длины комментария
 
-const checkStringLength = (string, stringLengthMax) => {
-  return string.length <= stringLengthMax;
-};
-*/
+//const checkStringLength = (string, stringLengthMax) => string.length <= stringLengthMax;
+
+//checkStringLength();
+
+export { getPositiveInteger, isEscapeKey  };
