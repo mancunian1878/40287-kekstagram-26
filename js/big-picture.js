@@ -1,9 +1,9 @@
-import { isEscapeKey } from './utils.js';
+import { isEscapeKey, bigPicture, body, commentsLoader, hideModal  } from './utils.js';
 
 
-const bigPicture = document.querySelector('.big-picture');
-const commentsLoader = document.querySelector('.comments-loader');
-const body = document.querySelector('body');
+//const bigPicture = document.querySelector('.big-picture');
+//const commentsLoader = document.querySelector('.comments-loader');
+//const body = document.querySelector('body');
 const closeBigPicture = bigPicture.querySelector('.big-picture__cancel');
 const socialComments = document.querySelector('.social__comments');
 const socialComment = document.querySelector('.social__comment');
@@ -30,11 +30,12 @@ const addComments = (comments) => {
   socialComments.append(commentFragment);
 };
 
-const hideModal = () => {
+/*const hideModal = () => {
   bigPicture.classList.add('hidden');
   commentsLoader.classList.remove('hidden');
   body.classList.remove('modal-open');
 };
+*/
 
 const onEscKeyDown = (evt) => {
   if (isEscapeKey(evt)) {
