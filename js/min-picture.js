@@ -1,6 +1,6 @@
 import { POSTS } from './data.js';
-import {getBigPicture} from './big-picture.js';
-
+//import {getBigPicture} from './big-picture.js';
+import {showBigPicture, showComments, showMoreComments} from './big-picture.js';
 
 const template = document.querySelector('#picture').content;
 
@@ -14,7 +14,9 @@ const makePicture = ({url, likes, comments }) => {
   picture.querySelector('.picture__comments').textContent = comments.length;
 
   picture.addEventListener('click', () => {
-    getBigPicture({url, likes, comments});
+    showBigPicture({url, likes, comments});
+    showComments();
+    showMoreComments();
   });
 
   return picture;
