@@ -15,7 +15,8 @@ const MessagesFormValidationErros = {
   INVALID_COUNT_HASHTAGS: 'Нельзя указать больше пяти хэш-тегов.'
 };
 
-const  MAX_HASHTAG_LENGTH = 20;
+const  MAX_HASHTAG_NUMBERS = 5;
+const RE = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
 
 const uploadFormOpen = () => {
@@ -33,17 +34,21 @@ const uploadFormOpen = () => {
   });
 };
 
+const closePopup = () => {
+  imgUploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.querySelector('.effect-level').classList.add('hidden');
+};
+
 const uploadFormClose = () => {
   closeButton.addEventListener('click', () => {
-    imgUploadOverlay.classList.add('hidden');
-    body.classList.remove('modal-open');
+    closePopup();
   });
 
   document.removeEventListener('keydown', (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      imgUploadOverlay.classList.add('hidden');
-      body.classList.remove('modal-open');
+      closePopup();
     }
   });
 };
@@ -56,20 +61,19 @@ hashtag.addEventListener('keydown', (evt) => {
 });
 
 const validateHashtags = (value) => {
-  const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
   const hashTags = value.toLowerCase().trim().split(' ');
-  return hashTags.every((hashTag) => re.test(hashTag));
+  return hashTags.every((hashTag) => RE.test(hashTag));
 };
 
 const validateUniqueHashtags = (value) => {
   const hashTags = value.toLowerCase().trim().split(' ');
-  return hashTags.length === 0 || hashTags.length === (new Set(hashTags)).size;
+  return hashTags.length === (new Set(hashTags)).size;
 };
 
 
 const validateCountHashtags = (value) => {
   const hashTags = value.toLowerCase().trim().split(' ');
-  return hashTags.length <= MAX_HASHTAG_LENGTH;
+  return hashTags.length < MAX_HASHTAG_NUMBERS;
 };
 
 const pristine = new Pristine(imgUploadForm, {

@@ -1,6 +1,5 @@
 import { POSTS } from './data.js';
-//import {getBigPicture} from './big-picture.js';
-import {showBigPicture, showComments, showMoreComments} from './big-picture.js';
+import {showBigPicture} from './big-picture.js';
 
 const template = document.querySelector('#picture').content;
 
@@ -15,18 +14,11 @@ const makePicture = ({url, likes, comments }) => {
 
   picture.addEventListener('click', () => {
     showBigPicture({url, likes, comments});
-    showComments();
-    showMoreComments();
   });
 
   return picture;
 };
 
-/*
-POSTS.forEach(({url, likes, comments}) => {
-  makePicture(url, likes, comments);
-});
-*/
 const addPictures = () => {
   const fragment = document.createDocumentFragment();
   POSTS.forEach((url, likes, comments) => {
