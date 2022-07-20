@@ -1,15 +1,22 @@
-import { isEscapeKey } from './utils.js';
+import { isEscapeKey, body } from './utils.js';
 
 const imgUploadFile = document.querySelector('#upload-file');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
-const body = document.querySelector('body');
+const imgUploadForm = document.querySelector('.img-upload__form');
 const closeButton = document.querySelector('.img-upload__cancel');
 const description = document.querySelector('.text__description');
 const hashtag = document.querySelector('.text__hashtags');
-const HASHTAG_PATTERN = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-const HASHTAG_QUANTITY = 5;
-const HASHTAG_LENGTH = 20;
-let hashtagArray = [];
+
+const MessagesFormValidationErros = {
+  INVALID_HASHTAGS: `Невалидный хэш-тег. Хэш-тег должен начинаться с символа # (решётка), состоять из букв и чисел,
+  не содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д..
+  Хеш-тег не может состоять только из одной решётки. Максимальная длина одного хэш-тега 20 символов, включая решётку.`,
+  NOT_UNIQUE_HASHTAGS: 'Один и тот же хэш-тег не может быть использован дважды.',
+  INVALID_COUNT_HASHTAGS: 'Нельзя указать больше пяти хэш-тегов.'
+};
+
+const  MAX_HASHTAG_NUMBERS = 5;
+const RE = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
 
 const uploadFormOpen = () => {
@@ -27,17 +34,21 @@ const uploadFormOpen = () => {
   });
 };
 
+const closePopup = () => {
+  imgUploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.querySelector('.effect-level').classList.add('hidden');
+};
+
 const uploadFormClose = () => {
   closeButton.addEventListener('click', () => {
-    imgUploadOverlay.classList.add('hidden');
-    body.classList.remove('modal-open');
+    closePopup();
   });
 
   document.removeEventListener('keydown', (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      imgUploadOverlay.classList.add('hidden');
-      body.classList.remove('modal-open');
+      closePopup();
     }
   });
 };
@@ -49,65 +60,31 @@ hashtag.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
 });
 
+const validateHashtags = (value) => {
+  const hashTags = value.toLowerCase().trim().split(' ');
+  return hashTags.every((hashTag) => RE.test(hashTag));
+};
 
-hashtag.addEventListener('input', () => {
-  const invalidHashtag = [];
+const validateUniqueHashtags = (value) => {
+  const hashTags = value.toLowerCase().trim().split(' ');
+  return hashTags.length === (new Set(hashTags)).size;
+};
 
-  hashtag.setCustomValidity('');
 
-  const inputText = hashtag.value.toLowerCase().trim();
-  if (!inputText) {
-    return;
-  }
+const validateCountHashtags = (value) => {
+  const hashTags = value.toLowerCase().trim().split(' ');
+  return hashTags.length < MAX_HASHTAG_NUMBERS;
+};
 
-  hashtagArray = inputText.split(/\s+/);
-
-  if (hashtagArray.length === 0) {
-    return;
-  }
-
-  const isStartNotLattice = hashtagArray.some((item) => item[0] !== '#');
-  if (isStartNotLattice) {
-    invalidHashtag.push('Хэш-тег должен начинаться с символа #');
-  }
-
-  const isOnlyLattice = hashtagArray.some((item) => item === '#');
-  if (isOnlyLattice) {
-    invalidHashtag.push('Хэш-тег не может состоять из одного символа #');
-  }
-
-  const isSplitBySpace = hashtagArray.some((item) => item.indexOf('#', 1) >= 1);
-  if (isSplitBySpace) {
-    invalidHashtag.push('Хэш-теги разделяются пробелами');
-  }
-
-  const isRepeatHashtag = hashtagArray.some((item, i, arr) => arr.indexOf(item, i + 1) >= i + 1);
-  if (isRepeatHashtag) {
-    invalidHashtag.push('Один и тот же хэш-тег не может быть использован дважды');
-  }
-
-  const isLongHashtag = hashtagArray.some((item) => item.length > HASHTAG_LENGTH);
-  if (isLongHashtag) {
-    invalidHashtag.push('Максимальная длина одного хэш-тега 20 символов, включая решётку');
-  }
-
-  if (hashtagArray.length > HASHTAG_QUANTITY) {
-    invalidHashtag.push('Хэш-тегов не должно быть больше 5');
-  }
-
-  const isNotPattern = hashtagArray.some((item) => HASHTAG_PATTERN.test(item) === false);
-  if (isNotPattern) {
-    invalidHashtag.push('Хэш-тег не соответсвует шаблону');
-  }
-
-  if (invalidHashtag.length > 0) {
-    hashtag.setCustomValidity(invalidHashtag.join('. \n'));
-    //hashtag.classList.add('validation__error');
-  } else {
-    //hashtag.classList.remove('validation__error');
-  }
-  hashtag.reportValidity();
+const pristine = new Pristine(imgUploadForm, {
+  classTo: 'img-upload__form',
+  errorTextParent: 'img-upload__field-wrapper'
 });
 
+pristine.addValidator(hashtag, validateHashtags, MessagesFormValidationErros.INVALID_HASHTAGS);
+pristine.addValidator(hashtag, validateUniqueHashtags, MessagesFormValidationErros.NOT_UNIQUE_HASHTAGS);
+pristine.addValidator(hashtag, validateCountHashtags, MessagesFormValidationErros.INVALID_COUNT_HASHTAGS);
 
 export {uploadFormOpen, uploadFormClose};
+
+
