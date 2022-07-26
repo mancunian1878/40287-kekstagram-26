@@ -1,4 +1,3 @@
-import { POSTS } from './data.js';
 import {showBigPicture} from './big-picture.js';
 
 const template = document.querySelector('#picture').content;
@@ -6,26 +5,33 @@ const template = document.querySelector('#picture').content;
 const pictureTemplate  = template.querySelector('a');
 const pictures = document.querySelector('.pictures');
 
-const makePicture = ({url, likes, comments }) => {
+const makePicture = (photo) => {
   const picture = pictureTemplate.cloneNode(true);
-  picture.querySelector('.picture__img').src = url;
-  picture.querySelector('.picture__likes').textContent = likes;
-  picture.querySelector('.picture__comments').textContent = comments.length;
+  picture.querySelector('.picture__img').src = photo.url;
+  picture.querySelector('.picture__likes').textContent = photo.likes;
+  picture.querySelector('.picture__comments').textContent = photo.comments.length;
 
   picture.addEventListener('click', () => {
-    showBigPicture({url, likes, comments});
+    showBigPicture(photo);
   });
 
   return picture;
 };
 
-const addPictures = () => {
+const addPictures = (thumbnails) => {
   const fragment = document.createDocumentFragment();
-  POSTS.forEach((url, likes, comments) => {
-    fragment.appendChild(makePicture(url, likes, comments ));
+  thumbnails.forEach((item) => {
+    fragment.appendChild(makePicture(item));
   });
   pictures.appendChild(fragment);
 };
 
-export {addPictures};
+const clearPictures = () => {
+  const addedPictures = document.querySelectorAll('.picture');
+  addedPictures.forEach((item) => {
+    item.remove();
+  });
+};
+
+export {addPictures, clearPictures};
 
