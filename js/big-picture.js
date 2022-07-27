@@ -1,19 +1,22 @@
-import { isEscapeKey, bigPicture, body, commentsLoader, hideModal  } from './utils.js';
+import { isEscapeKey } from './utils.js';
 
-const closeBigPicture = bigPicture.querySelector('.big-picture__cancel');
-const socialComments = document.querySelector('.social__comments');
-const socialComment = document.querySelector('.social__comment');
 const MAX_COMMENTS = 5;
+const bigPicture = document.querySelector('.big-picture');
+const body = document.querySelector('body');
+const buttonCloseBigPicture = bigPicture.querySelector('.big-picture__cancel');
+const commentsContainer = document.querySelector('.social__comments');
+const socialComment = document.querySelector('.social__comment');
+const commentsLoader = document.querySelector('.comments-loader');
 let currentComments = 5;
 
 const makeComment = ({avatar, name, message}) => {
-  const commentsListItem = socialComment.cloneNode(true);
+  const commentListItem = socialComment.cloneNode(true);
 
-  commentsListItem.querySelector('.social__picture').src = avatar;
-  commentsListItem.querySelector('.social__picture').alt = name;
-  commentsListItem.querySelector('.social__text').textContent = message;
+  commentListItem.querySelector('.social__picture').src = avatar;
+  commentListItem.querySelector('.social__picture').alt = name;
+  commentListItem.querySelector('.social__text').textContent = message;
 
-  return commentsListItem;
+  return commentListItem;
 };
 
 const addComments = (comments) => {
@@ -22,8 +25,13 @@ const addComments = (comments) => {
     commentFragment.append(makeComment({avatar, name, message}));
   });
 
-  socialComments.innerHTML = '';
-  socialComments.append(commentFragment);
+  commentsContainer.innerHTML = '';
+  commentsContainer.append(commentFragment);
+};
+
+const hideModal = () => {
+  bigPicture.classList.add('hidden');
+  body.classList.remove('modal-open');
 };
 
 const onEscKeyDown = (evt) => {
@@ -32,7 +40,6 @@ const onEscKeyDown = (evt) => {
     hideModal();
   }
 };
-
 
 const showComments = (comments) => {
   const onCommentsLoaderClick = () => {
@@ -57,11 +64,10 @@ const showComments = (comments) => {
   }
 };
 
-
 const showBigPicture = ({url, likes, description, comments}) => {
   currentComments = 5;
 
-  bigPicture.querySelector('.big-picture__img img').src = url;
+  bigPicture.querySelector('.full-photo').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.social__caption').textContent = description;
 
@@ -78,7 +84,7 @@ const showBigPicture = ({url, likes, description, comments}) => {
   showComments(comments);
 };
 
-closeBigPicture.addEventListener('click', () => {
+buttonCloseBigPicture.addEventListener('click', () => {
   hideModal();
   document.removeEventListener('keydown', onEscKeyDown);
 });
