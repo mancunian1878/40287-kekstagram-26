@@ -5,9 +5,9 @@ import {request} from './api.js';
 const HASHTAG_PATTERN = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const HASHTAG_QUANTITY = 5;
 const HASHTAG_LENGTH = 20;
-const SCALE_EDGES = {
-  min: 25,
-  max: 100,
+const Scale = {
+  MIN: 25,
+  MAX: 100,
 };
 const SCALE_STEP = 25;
 const body = document.querySelector('body');
@@ -57,7 +57,7 @@ const onEscKeyDown = (evt) => {
     uploadForm.reset();
   }
 };
-const uploadFormOpen = () => {
+const openUploadForm = () => {
   imgUploadFile.addEventListener('change', () => {
     imgUploadOverlay.classList.remove('hidden');
     body.classList.add('modal-open');
@@ -71,7 +71,7 @@ const uploadFormOpen = () => {
   });
 };
 
-const uploadFormClose = () => {
+const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   effectSlider.noUiSlider.reset();
@@ -82,7 +82,7 @@ const uploadFormClose = () => {
 };
 
 closeButton.addEventListener('click', () => {
-  uploadFormClose();
+  closeUploadForm();
 });
 
 description.addEventListener('keydown', (evt) => {
@@ -156,7 +156,7 @@ scaleControlValue.value = `${currentValue}%`;
 
 const minimizePhoto = () => {
   scaleControlSmaller.addEventListener('click', () => {
-    if (currentValue !== SCALE_EDGES.min) {
+    if (currentValue !== Scale.MIN) {
       scaleControlValue.value = `${currentValue - SCALE_STEP}%`;
       currentValue -= SCALE_STEP;
       imagePreview.style.transform = `scale(${currentValue/100})`;
@@ -167,7 +167,7 @@ const minimizePhoto = () => {
 
 const maximizePhoto = () => {
   scaleControlBigger.addEventListener('click', () => {
-    if (currentValue !== SCALE_EDGES.max) {
+    if (currentValue !== Scale.MAX) {
       scaleControlValue.value = `${currentValue + SCALE_STEP}%`;
       currentValue += SCALE_STEP;
       imagePreview.style.transform = `scale(${currentValue/100})`;
@@ -261,13 +261,13 @@ const setUploadFormSubmit = () => {
       new FormData(evt.target),
     );
 
-    uploadFormClose();
+    closeUploadForm();
     uploadForm.reset();
   });
 };
 
 setUploadFormSubmit();
-uploadFormOpen();
+openUploadForm();
 minimizePhoto();
 maximizePhoto();
 applyEffect();
