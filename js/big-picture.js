@@ -1,13 +1,13 @@
 import { isEscapeKey } from './utils.js';
 
-const MAX_COMMENTS = 5;
+const MAX_COUNT_COMMENT = 5;
 const bigPicture = document.querySelector('.big-picture');
 const body = document.querySelector('body');
 const buttonCloseBigPicture = bigPicture.querySelector('.big-picture__cancel');
 const commentsContainer = document.querySelector('.social__comments');
 const socialComment = document.querySelector('.social__comment');
 const commentsLoader = document.querySelector('.comments-loader');
-let currentComments = 5;
+let currentComment = 5;
 
 const makeComment = ({avatar, name, message}) => {
   const commentListItem = socialComment.cloneNode(true);
@@ -43,19 +43,19 @@ const onEscKeyDown = (evt) => {
 
 const showComments = (comments) => {
   const onCommentsLoaderClick = () => {
-    currentComments += MAX_COMMENTS;
+    currentComment += MAX_COUNT_COMMENT;
 
     showComments(comments);
     commentsLoader.removeEventListener('click', onCommentsLoaderClick);
   };
 
-  const publishedComments = comments.slice(0, currentComments > comments.length ? comments.length : currentComments);
+  const publishedComments = comments.slice(0, currentComment > comments.length ? comments.length : currentComment);
 
   addComments(publishedComments);
 
   bigPicture.querySelector('.social__comment-count').textContent = `${publishedComments.length} из ${comments.length} комментариев`;
 
-  if (currentComments < comments.length) {
+  if (currentComment < comments.length) {
     commentsLoader.classList.remove('hidden');
     commentsLoader.addEventListener('click', onCommentsLoaderClick);
   } else {
@@ -65,9 +65,9 @@ const showComments = (comments) => {
 };
 
 const showBigPicture = ({url, likes, description, comments}) => {
-  currentComments = 5;
+  currentComment = 5;
 
-  bigPicture.querySelector('.full-photo').src = url;
+  bigPicture.querySelector('.big-picture__img img').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.social__caption').textContent = description;
 
@@ -76,8 +76,8 @@ const showBigPicture = ({url, likes, description, comments}) => {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
 
-  bigPicture.querySelector('.social__comment-count').textContent = `${MAX_COMMENTS} из ${comments.length} комментариев`;
-  if (comments.length < MAX_COMMENTS) {
+  bigPicture.querySelector('.social__comment-count').textContent = `${MAX_COUNT_COMMENT} из ${comments.length} комментариев`;
+  if (comments.length < MAX_COUNT_COMMENT) {
     bigPicture.querySelector('.social__comment-count').textContent = `${comments.length} из ${comments.length} комментариев`;
   }
 
