@@ -5,7 +5,7 @@ const RERENDER_DELAY = 500;
 const POSTS_FILTER_NUMBER = 10;
 const SHUFFLE_CONST = 0.5;
 
-const imgFilters = document.querySelector('.img-filters');
+const imgFilter = document.querySelector('.img-filters');
 const filterBtnDefault = document.querySelector('#filter-default');
 const filterBtnRandom = document.querySelector('#filter-random');
 const filterBtnDiscussed = document.querySelector('#filter-discussed');
@@ -43,7 +43,7 @@ const updatePosts = (posts) => {
 const debouncedPosts = debounce(updatePosts, RERENDER_DELAY);
 
 const initFilters = (posts) => {
-  imgFilters.classList.remove('img-filters--inactive');
+  imgFilter.classList.remove('img-filters--inactive');
   filterBtnDefault.addEventListener('click',(evt) => {
     setActiveBtn(evt.target);
     debouncedPosts(getDefaultPosts(posts));
